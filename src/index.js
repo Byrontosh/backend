@@ -1,13 +1,17 @@
-// Creación de un servidor web en Express
+// Importación de librerías
 const express = require('express')
 const {engine} = require('express-handlebars')
+const path = require('path')
+
+
 
 const app = express()
 
 app.use(express.json())
+
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars')
-app.set('views', './src/views')
+app.set('views', path.join(__dirname,"views"))
 
 
 // Manejo de rutas
@@ -79,22 +83,27 @@ app.get('/hamburguesa/vegana',(req,res)=>{
 })
 
 
+// Manejo de middlewares
 
-app.post('/entrada',(req,res)=>{
-    res.send("Entrada del local")
+app.get('/entrada',(req,res)=>{
+    res.send("Entrada al local")
 })
+
 app.use((req,res,next)=>{
+
     const {email,password} = req.body
-    if(email==="byron@gmail.com" && password==="12345"){
+    if (email ==="byron@gmail.com" && password === "12345"){
         next()
     }
     else{
-        res.send("El usuario no se encuentra autenticado")
+        res.send("Usuario no registrado")
     }
 })
-app.get('/bienvenidos',(req,res)=>{
-    res.send(`Bienvenido ${req.body.email} al sistema web`)
+
+app.get('/pedidos',(req,res)=>{
+    res.send(`Bienvenido - ${req.body.email}`)
 })
+
 
 
 app.listen(3000)
